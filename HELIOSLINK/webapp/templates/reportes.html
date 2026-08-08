@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Reportes — HELIOSLINK{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h2 class="page-header__title">Reportes</h2>
+    <p class="page-header__subtitle">Genera reportes personalizados de tu infraestructura</p>
+  </div>
+</div>
+
+<div class="grid grid--2" style="align-items:start;">
+
+  <!-- FORM PANEL -->
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">Configurar Reporte</h3>
+    </div>
+    <div class="card__body">
+
+      <form method="POST" action="{% url 'generar_pdf' %}">
+        {% csrf_token %}
+
+        <!-- Date range -->
+        <div class="form-group">
+          <label class="form-label" for="id_start_date">Rango de fechas</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">
+            <input type="date" name="start_date" id="id_start_date" class="form-control">
+            <input type="date" name="end_date"   id="id_end_date"   class="form-control">
+          </div>
+        </div>
+
+        <!-- Content section -->
+        <p class="form-section-title">Contenido del reporte</p>
+
+        <label class="form-check">
+          <input
+            class="form-check__input"
+            type="checkbox"
+            name="include_network"
+            id="include_network"
+          >
+          <span class="form-check__label">Resumen de red</span>
+        </label>
+
+        <label class="form-check">
+          <input
+            class="form-check__input"
+            type="checkbox"
+            name="include_history"
+            id="include_history"
+            onchange="toggleDateInputs()"
+          >
+          <span class="form-check__label">Datos históricos</span>
+        </label>
+
+        <!-- Metrics -->
+        <p class="form-section-title">Métricas adicionales</p>
+
+        <label class="form-check">
+          <input class="form-check__input" type="checkbox" name="include_production"> 
+          <span class="form-check__label">Producción energética</span>
+        </label>
+
+        <label class="form-check">
+          <input class="form-check__input" type="checkbox" name="include_consumption">
+          <span class="form-check__label">Consumo energético</span>
+        </label>
+
+        <!-- Presentation -->
+        <p class="form-section-title">Formato de visualización</p>
+
+        <label class="form-check">
+          <input
+            class="form-check__input"
+            type="radio"
+            name="presentation"
+            value="tables"
+            checked
+          >
+          <span class="form-check__label">Datos estructurados (tablas)</span>
+        </label>
+
+        <label class="form-check">
+          <input
+            class="form-check__input"
+            type="radio"
+            name="presentation"
+            value="charts"
+          >
+          <span class="form-check__label">Gráficas</span>
+        </label>
+
+        <div style="margin-top:var(--space-7);">
+          <button type="submit" class="btn btn--primary">
+            Generar PDF
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- PREVIEW PANEL
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">Vista Previa</h3>
+      <span class="badge badge--muted">30 s estimados</span>
+    </div>
+    <div class="card__body">
+      <table class="report-preview">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Proyecto</th>
+            <th>Datos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="report-preview__placeholder" style="width:60px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:50px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:80px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:40px;"></span></td>
+          </tr>
+          <tr>
+            <td><span class="report-preview__placeholder" style="width:60px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:50px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:80px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:40px;"></span></td>
+          </tr>
+          <tr>
+            <td><span class="report-preview__placeholder" style="width:60px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:50px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:80px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:40px;"></span></td>
+          </tr>
+          <tr>
+            <td><span class="report-preview__placeholder" style="width:60px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:50px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:80px;"></span></td>
+            <td><span class="report-preview__placeholder" style="width:40px;"></span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-4);">
+        Selecciona los campos para ver la vista previa del reporte.
+      </p>
+    </div>
+  </div> -->
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleDateInputs() {
+  var checkbox = document.getElementById("include_history");
+  var startDate = document.getElementById("id_start_date");
+  var endDate   = document.getElementById("id_end_date");
+  var opacity   = checkbox.checked ? "1" : "0.4";
+  startDate.style.opacity = opacity;
+  endDate.style.opacity   = opacity;
+  startDate.disabled = !checkbox.checked;
+  endDate.disabled   = !checkbox.checked;
+}
+document.addEventListener("DOMContentLoaded", function () { toggleDateInputs(); });
+</script>
+{% endblock %}

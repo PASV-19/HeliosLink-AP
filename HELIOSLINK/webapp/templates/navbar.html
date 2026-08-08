@@ -1,0 +1,160 @@
+{% load static %}
+
+<!-- HEADER -->
+<header class="panel-header">
+
+  <!-- LEFT -->
+  <div class="panel-header__left">
+    <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="panelSidebar">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <img src="{% static 'images/logo.png' %}" alt="Logo HELIOSLINK" class="panel-header__logo">
+  </div>
+
+  <!-- CENTER -->
+  <h1 class="panel-header__title">{{ page_name }}</h1>
+
+  <!-- RIGHT -->
+  <div class="panel-header__right">
+    <span class="panel-header__user">{{ request.user.username }}</span>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit" class="panel-header__logout">
+        Logout
+      </button>
+    </form>
+  </div>
+
+</header>
+
+<!-- OVERLAY -->
+<div class="panel-overlay" id="panelOverlay" aria-hidden="true"></div>
+
+<!-- SIDEBAR -->
+<aside class="panel-sidebar" id="panelSidebar" aria-label="Navegación principal">
+
+  <div class="panel-sidebar__brand">
+    <img src="{% static 'images/logo.png' %}" alt="HELIOSLINK" class="panel-sidebar__brand-logo">
+    <span class="panel-sidebar__brand-name">Helios Link</span>
+  </div>
+
+  <nav aria-label="Menú de navegación">
+    <p class="panel-nav__section-label">Principal</p>
+    <ul class="panel-nav" role="list">
+      <li class="panel-nav__item">
+        <a href="{% url 'dashboard' %}" class="panel-nav__link">
+          <svg class="panel-nav__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="1" y="1" width="6" height="6" rx="1"/>
+            <rect x="9" y="1" width="6" height="6" rx="1"/>
+            <rect x="1" y="9" width="6" height="6" rx="1"/>
+            <rect x="9" y="9" width="6" height="6" rx="1"/>
+          </svg>
+          Panel Principal
+        </a>
+      </li>
+    </ul>
+
+    <p class="panel-nav__section-label">Monitoreo</p>
+    <ul class="panel-nav" role="list">
+      <li class="panel-nav__item">
+        <a href="{% url 'graf_info' %}" class="panel-nav__link">
+          <svg class="panel-nav__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <polyline points="1,12 5,7 8,9 12,4 15,6"/>
+            <line x1="1" y1="15" x2="15" y2="15"/>
+          </svg>
+          Gráficas e Información
+        </a>
+      </li>
+      <!-- <li class="panel-nav__item">
+        <a href="" class="panel-nav__link">
+          <svg class="panel-nav__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="1" y="7" width="3" height="8"/>
+            <rect x="6" y="4" width="3" height="11"/>
+            <rect x="11" y="1" width="3" height="14"/>
+          </svg>
+          Gráficas Históricas
+        </a>
+      </li> -->
+      <li class="panel-nav__item">
+        <a href="{% url 'net_info' %}" class="panel-nav__link">
+          <svg class="panel-nav__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="8" cy="8" r="2"/>
+            <circle cx="8" cy="8" r="6"/>
+            <line x1="8" y1="1" x2="8" y2="15"/>
+            <line x1="1" y1="8" x2="15" y2="8"/>
+          </svg>
+          Información de Red
+        </a>
+      </li>
+    </ul>
+
+    <p class="panel-nav__section-label">Gestión</p>
+    <ul class="panel-nav" role="list">
+      <li class="panel-nav__item">
+        <a href="{% url 'reportes' %}" class="panel-nav__link">
+          <svg class="panel-nav__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="2" y="1" width="12" height="14" rx="1"/>
+            <line x1="5" y1="5" x2="11" y2="5"/>
+            <line x1="5" y1="8" x2="11" y2="8"/>
+            <line x1="5" y1="11" x2="8" y2="11"/>
+          </svg>
+          Reportes
+        </a>
+      </li>
+      <li class="panel-nav__item">
+        <a href="{% url 'user_info' %}" class="panel-nav__link">
+          <svg class="panel-nav__icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="8" cy="5" r="3"/>
+            <path d="M1 14c0-3.866 3.134-7 7-7s7 3.134 7 7"/>
+          </svg>
+          Información del Usuario
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+</aside>
+
+<script>
+(function () {
+  const menuBtn  = document.getElementById("menuBtn");
+  const sidebar  = document.getElementById("panelSidebar");
+  const overlay  = document.getElementById("panelOverlay");
+
+  function open() {
+    sidebar.classList.add("is-open");
+    overlay.classList.add("is-open");
+    menuBtn.classList.add("is-open");
+    menuBtn.setAttribute("aria-expanded", "true");
+    overlay.removeAttribute("aria-hidden");
+  }
+
+  function close() {
+    sidebar.classList.remove("is-open");
+    overlay.classList.remove("is-open");
+    menuBtn.classList.remove("is-open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    overlay.setAttribute("aria-hidden", "true");
+  }
+
+  menuBtn.addEventListener("click", function () {
+    sidebar.classList.contains("is-open") ? close() : open();
+  });
+
+  overlay.addEventListener("click", close);
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") close();
+  });
+
+  /* Mark active link */
+  const links = sidebar.querySelectorAll(".panel-nav__link");
+  links.forEach(function (link) {
+    if (link.getAttribute("href") === window.location.pathname) {
+      link.classList.add("panel-nav__link--active");
+    }
+  });
+}());
+</script>

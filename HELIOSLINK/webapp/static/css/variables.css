@@ -1,0 +1,77 @@
+/* ============================================================
+   HELIOSLINK — Design System Variables
+   Extraídas de los mockups de referencia
+   ============================================================ */
+
+:root {
+  /* --- Paleta de Color --- */
+  --color-bg-base:        #1a1a1a;   /* fondo principal, casi negro */
+  --color-bg-surface:     #242424;   /* tarjetas / paneles */
+  --color-bg-elevated:    #2e2e2e;   /* inputs, hover sutil */
+  --color-bg-sidebar:     #1e1e1e;   /* sidebar específico */
+  --color-border:         #3a3a3a;   /* bordes suaves */
+  --color-border-muted:   #2f2f2f;   /* bordes muy sutiles */
+
+  --color-accent:         #c8a96e;   /* dorado-solar, firma de marca */
+  --color-accent-dim:     rgba(200,169,110,0.15); /* hover sobre accent */
+  --color-accent-glow:    rgba(200,169,110,0.08);
+
+  --color-text-primary:   #e8e2d9;   /* texto principal cálido */
+  --color-text-secondary: #9a9189;   /* texto secundario / labels */
+  --color-text-muted:     #5e5a55;   /* texto desactivado */
+  --color-text-inverse:   #1a1a1a;   /* texto sobre acento */
+
+  --color-success:        #4caf7d;
+  --color-warning:        #e8a53a;
+  --color-danger:         #e05c5c;
+  --color-info:           #5c9ae8;
+
+  /* --- Tipografía --- */
+  --font-display: 'Georgia', 'Times New Roman', serif;
+  --font-body:    system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono:    'SF Mono', 'Consolas', 'Courier New', monospace;
+
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.8125rem;  /* 13px */
+  --text-base: 0.9375rem;  /* 15px */
+  --text-md:   1.0625rem;  /* 17px */
+  --text-lg:   1.25rem;    /* 20px */
+  --text-xl:   1.625rem;   /* 26px */
+  --text-2xl:  2.25rem;    /* 36px */
+  --text-3xl:  3rem;       /* 48px */
+
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold: 600;
+  --weight-bold:    700;
+
+  /* --- Espaciado --- */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  32px;
+  --space-8:  40px;
+  --space-9:  48px;
+  --space-10: 64px;
+
+  /* --- Layout --- */
+  --header-h:    58px;
+  --sidebar-w:   260px;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-full: 9999px;
+
+  /* --- Sombras --- */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.6);
+  --shadow-accent: 0 0 20px rgba(200,169,110,0.12);
+
+  /* --- Transiciones --- */
+  --transition-fast: 0.15s ease;
+  --transition-med:  0.25s ease;
+}

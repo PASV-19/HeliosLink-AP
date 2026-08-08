@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Información del Usuario — HELIOSLINK{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h2 class="page-header__title">Perfil de Usuario</h2>
+    <p class="page-header__subtitle">Gestiona tu información personal y la de tu organización</p>
+  </div>
+</div>
+
+<div class="grid grid--2" style="align-items:start;gap:var(--space-6);">
+
+  <!-- LEFT COLUMN -->
+  <div style="display:flex;flex-direction:column;gap:var(--space-5);">
+
+    <!-- Avatar & name -->
+    <div class="card">
+      <div class="card__body" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--space-4);padding:var(--space-8) var(--space-6);">
+        <div class="user-profile__avatar" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="16" cy="11" r="5"/>
+            <path d="M4 28c0-6.627 5.373-12 12-12s12 5.373 12 12"/>
+          </svg>
+        </div>
+        <div>
+          <h3 class="user-profile__name">{{ user.username }}</h3>
+          <p class="user-profile__badge" style="margin-top:var(--space-2);">
+            {% if usuario.status_usr %}Activo{% else %}Inactivo{% endif %}
+          </p>
+        </div>
+        <div style="width:100%;border-top:1px solid var(--color-border-muted);padding-top:var(--space-4);">
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);margin-bottom:var(--space-3);">
+            <span style="color:var(--color-text-muted);">Usuario</span>
+            <span style="color:var(--color-text-secondary);font-family:var(--font-mono);">{{ user.username }}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);">
+            <span style="color:var(--color-text-muted);">Email</span>
+            <span style="color:var(--color-text-secondary);font-family:var(--font-mono);">{{ user.email }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Organization info -->
+    <div class="card">
+      <div class="card__header">
+        <h3 class="card__title">Organización</h3>
+      </div>
+      <div class="card__body">
+        <div class="net-card__field">
+          <span class="net-card__label">Nombre</span>
+          <span class="net-card__value">{{ org.name_org }}</span>
+        </div>
+        <div class="net-card__field" style="margin-top:var(--space-3);">
+          <span class="net-card__label">Ubicación</span>
+          <span class="net-card__value">{{ org.ubica_org }}</span>
+        </div>
+        <div class="net-card__field" style="margin-top:var(--space-3);">
+          <span class="net-card__label">Teléfono</span>
+          <span class="net-card__value">{{ org.tel }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN: Update form -->
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">Actualizar Datos</h3>
+    </div>
+    <div class="card__body">
+
+      {% if success %}
+      <div class="alert alert--success" role="status">{{ success }}</div>
+      {% endif %}
+
+      {% if error %}
+      <div class="alert alert--danger" role="alert">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST" novalidate>
+        {% csrf_token %}
+
+        <p class="form-section-title">Información personal</p>
+
+        <div class="form-group">
+          <label class="form-label" for="id_email">Nuevo email</label>
+          <input
+            type="email"
+            name="email"
+            id="id_email"
+            class="form-control"
+            placeholder="correo@ejemplo.com"
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="id_password">Nueva contraseña</label>
+          <input
+            type="password"
+            name="password"
+            id="id_password"
+            class="form-control"
+            placeholder="••••••••"
+            autocomplete="new-password"
+          >
+        </div>
+
+        <div style="display:flex;gap:var(--space-3);margin-top:var(--space-6);">
+          <button type="submit" class="btn btn--primary">Guardar cambios</button>
+          <button type="reset"  class="btn btn--ghost">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

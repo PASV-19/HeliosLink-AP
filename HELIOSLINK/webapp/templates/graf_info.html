@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}Gráficas e Información — HELIOSLINK{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h2 class="page-header__title">Gráficas e Información</h2>
+    <p class="page-header__subtitle">Exposición solar y Gráficas informativas</p>
+  </div>
+</div>
+
+<div class="grid" style="grid-template-columns:280px 1fr;gap:var(--space-5);margin-bottom:var(--space-5);">
+
+  <!-- LEFT COLUMN: stat cards -->
+  <div style="display:flex;flex-direction:column;gap:var(--space-5);">
+  <!--
+    <div class="stat-card">
+      <p class="stat-card__label">Ángulo de los paneles</p>
+      <p class="stat-card__value stat-card__value--accent">{{ angle|default:"--" }}°</p>
+      <p class="stat-card__sub">Inclinación actual</p>
+    </div>
+  -->
+    <div class="stat-card">
+      <p class="stat-card__label">Tiempo de exposición actual</p>
+      <p class="stat-card__value" style="font-size:var(--text-xl);">{{ current_exposure|default:"00:00:00" }}</p>
+      <p class="stat-card__sub" style="margin-top:var(--space-3);">
+        <span class="badge {% if status == 'charging' %}badge--success{% else %}badge--muted{% endif %}">
+          {{ status|default:"inactivo" }}
+        </span>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: exposure chart -->
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">Tiempo de Exposición Total Diario</h3>
+    </div>
+    <div class="card__body">
+      <div class="chart-wrap">
+        <canvas id="exposureChart" aria-label="Gráfica de horas de exposición solar diarias"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="grid grid--2">
+
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">Producción y Consumo Actual</h3>
+    </div>
+    <div class="card__body">
+      <div class="chart-wrap">
+        <canvas id="chartProduccionConsumo" aria-label="Gráfica de producción y consumo actual"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__header">
+      <h3 class="card__title">Producción y Consumo Diario</h3>
+    </div>
+    <div class="card__body">
+      <div class="chart-wrap">
+        <canvas id="chartProduccionConsumoDiario" aria-label="Gráfica de producción y consumo diario"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+(function () {
+  var accent   = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim()    || '#c8a96e';
+  var border   = getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim()    || '#3a3a3a';
+  var textMuted = getComputedStyle(document.documentElement).getPropertyValue('--color-text-muted').trim() || '#5e5a55';
+
+  Chart.defaults.color = textMuted;
+  Chart.defaults.borderColor = border;
+  Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+  Chart.defaults.font.size = 12;
+
+  var data = JSON.parse('{{ history|escapejs }}');
+  var labels = data.map(function (item) { return item.day; });
+  var values = data.map(function (item) { return item.hours; });
+
+  new Chart(document.getElementById('exposureChart'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Horas de exposición',
+        data: values,
+        backgroundColor: accent + 'cc',
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: textMuted } }
+      },
+      scales: {
+        x: { grid: { color: border }, ticks: { color: textMuted } },
+        y: { grid: { color: border }, ticks: { color: textMuted } }
+      }
+    }
+  });
+}());
+</script>
+
+<!-- Script for historic graphs -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{{ current_day|json_script:"current-data" }}
+{{ daily|json_script:"daily-data" }}
+
+<script>
+(function () {
+  var accent = getComputedStyle(document.documentElement)
+    .getPropertyValue('--color-accent').trim() || '#c8a96e';
+  var success = getComputedStyle(document.documentElement)
+    .getPropertyValue('--color-success').trim() || '#4caf7d';
+  var border = getComputedStyle(document.documentElement)
+    .getPropertyValue('--color-border').trim() || '#3a3a3a';
+  var textMuted = getComputedStyle(document.documentElement)
+    .getPropertyValue('--color-text-muted').trim() || '#5e5a55';
+
+  Chart.defaults.color = textMuted;
+  Chart.defaults.borderColor = border;
+  Chart.defaults.font.family = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+  Chart.defaults.font.size = 12;
+
+  var current = JSON.parse(document.getElementById('current-data').textContent) || {
+    labels: [], production: [], consumption: []
+  };
+  var daily = JSON.parse(document.getElementById('daily-data').textContent) || {
+    labels: [], production: [], consumption: []
+  };
+
+  var sharedOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        labels: { color: textMuted, boxWidth: 12, padding: 16 }
+      }
+    },
+    scales: {
+      x: { grid: { color: border }, ticks: { color: textMuted } },
+      y: { grid: { color: border }, ticks: { color: textMuted } }
+    }
+  };
+
+  new Chart(document.getElementById('chartProduccionConsumo'), {
+    type: 'line',
+    data: {
+      labels: current.labels,
+      datasets: [
+        {
+          label: 'Producción',
+          data: current.production,
+          borderColor: accent,
+          backgroundColor: accent + '22',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.3,
+          fill: true
+        },
+        {
+          label: 'Consumo',
+          data: current.consumption,
+          borderColor: success,
+          backgroundColor: success + '22',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.3,
+          fill: true
+        }
+      ]
+    },
+    options: sharedOptions
+  });
+
+  new Chart(document.getElementById('chartProduccionConsumoDiario'), {
+    type: 'bar',
+    data: {
+      labels: daily.labels,
+      datasets: [
+        {
+          label: 'Producción',
+          data: daily.production,
+          backgroundColor: accent + 'bb',
+          borderRadius: 4
+        },
+        {
+          label: 'Consumo',
+          data: daily.consumption,
+          backgroundColor: success + 'bb',
+          borderRadius: 4
+        }
+      ]
+    },
+    options: sharedOptions
+  });
+}());
+</script>
+{% endblock %}

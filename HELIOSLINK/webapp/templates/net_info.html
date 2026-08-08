@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Información de Red — HELIOSLINK{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h2 class="page-header__title">Información de Red</h2>
+    <p class="page-header__subtitle">Información General y Gestión de Dispositivos</p>
+  </div>
+</div>
+
+<!-- TOP NET CARDS -->
+<div class="net-grid" style="margin-bottom:var(--space-5);">
+
+  <div class="net-card">
+    <p class="net-card__title">Información de Red</p>
+    <div class="net-card__field">
+      <span class="net-card__label">IPv4</span>
+      <span class="net-card__value">192.168.1.1</span>
+    </div>
+    <div class="net-card__field">
+      <span class="net-card__label">MAC Address</span>
+      <span class="net-card__value">AA-BB-CC-DD-EE-FF</span>
+    </div>
+    <div class="net-card__field">
+      <span class="net-card__label">Soporte IPv6</span>
+      <span class="net-card__value"><span class="badge badge--danger">Sin Soporte</span></span>
+    </div>
+  </div>
+
+  <div class="net-card">
+    <p class="net-card__title">Cantidad de Dispositivos</p>
+    <div class="net-card__field">
+      <span class="net-card__label">Cantidad máxima soportada</span>
+      <span class="net-card__value">15 dispositivos</span>
+    </div>
+    <div class="net-card__field">
+      <span class="net-card__label">Soporte de dispositivos IoT</span>
+      <span class="net-card__value">Hasta 10 dispositivos</span>
+    </div>
+    <div class="net-card__field">
+      <span class="net-card__label">Soporte de dispositivos no IoT</span>
+      <span class="net-card__value">Hasta 5 dispositivos</span>
+    </div>
+  </div>
+<!--
+  <div class="net-card">
+    <p class="net-card__title">Gateway &amp; DNS</p>
+    <div class="net-card__field">
+      <span class="net-card__label">Gateway por defecto</span>
+      <span class="net-card__value">192.168.1.1</span>
+    </div>
+    <div class="net-card__field">
+      <span class="net-card__label">DNS primario</span>
+      <span class="net-card__value">8.8.8.8</span>
+    </div>
+    <div class="net-card__field">
+      <span class="net-card__label">DNS secundario</span>
+      <span class="net-card__value">8.8.4.4</span>
+    </div>
+  </div>
+
+  <div class="net-card">
+    <p class="net-card__title">Subred &amp; MAC</p>
+    <div class="net-card__field">
+      <span class="net-card__label">Máscara de subred</span>
+      <span class="net-card__value">255.255.0.0</span>
+    </div>
+    <div class="net-card__field">
+      <span class="net-card__label">Dirección MAC</span>
+      <span class="net-card__value">00:1A:2B:3C:40:5E</span>
+    </div>
+  </div>
+-->
+</div>
+
+<!-- ACTIVITY CARD
+<div class="net-card" style="margin-bottom:var(--space-7);">
+  <p class="net-card__title">Actividad de Red</p>
+  <div class="net-activity" aria-hidden="true">
+    <div class="net-activity__bar" style="height:20%;"></div>
+    <div class="net-activity__bar" style="height:35%;"></div>
+    <div class="net-activity__bar" style="height:15%;"></div>
+    <div class="net-activity__bar" style="height:55%;"></div>
+    <div class="net-activity__bar" style="height:40%;"></div>
+    <div class="net-activity__bar" style="height:70%;"></div>
+    <div class="net-activity__bar" style="height:45%;"></div>
+    <div class="net-activity__bar" style="height:30%;"></div>
+    <div class="net-activity__bar" style="height:60%;"></div>
+    <div class="net-activity__bar" style="height:80%;"></div>
+    <div class="net-activity__bar" style="height:50%;"></div>
+    <div class="net-activity__bar" style="height:25%;"></div>
+    <div class="net-activity__bar" style="height:65%;"></div>
+    <div class="net-activity__bar" style="height:90%;"></div>
+    <div class="net-activity__bar" style="height:55%;"></div>
+    <div class="net-activity__bar" style="height:40%;"></div>
+    <div class="net-activity__bar" style="height:75%;"></div>
+    <div class="net-activity__bar" style="height:30%;"></div>
+    <div class="net-activity__bar" style="height:20%;"></div>
+    <div class="net-activity__bar" style="height:45%;"></div>
+  </div>
+  <div class="net-activity__footer">
+    <span>Entrada: 5.2 GB</span>
+    <span>Salida: 3.1 GB</span>
+  </div>
+</div>
+-->
+
+<!-- DEVICE LIST -->
+<div class="card">
+  <div class="card__header">
+    <h3 class="card__title">Dispositivos en la Red</h3>
+    {% if devices %}
+    <span class="badge badge--info">{{ devices|length }} encontrado{{ devices|length|pluralize:"s" }}</span>
+    {% endif %}
+  </div>
+  <div class="card__body">
+
+    {% if devices %}
+    <div class="device-grid">
+      {% for device in devices %}
+      <article class="device-card">
+        <h4 class="device-card__name">{{ device.name_mic }}</h4>
+        <div class="device-card__row">
+          <span class="device-card__row-label">IP</span>
+          <span class="device-card__row-value">{{ device.ip_add }}</span>
+        </div>
+        <div class="device-card__row">
+          <span class="device-card__row-label">MAC</span>
+          <span class="device-card__row-value">{{ device.mac_add }}</span>
+        </div>
+        <div class="device-card__row">
+          <span class="device-card__row-label">Estado</span>
+          <span class="device-card__row-value"><span class="badge badge--success">Activo</span></span>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="alert alert--warning" role="status">
+      No hay dispositivos registrados para tu organización.
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

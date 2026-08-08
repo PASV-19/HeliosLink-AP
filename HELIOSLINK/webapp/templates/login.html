@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión — HELIOSLINK</title>
+  <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+
+<body class="auth-body">
+
+  <!-- HERO / LOGIN -->
+  <section class="auth-hero">
+    <div class="auth-hero__bg" aria-hidden="true"></div>
+
+    <div class="auth-hero__content">
+
+      <!-- Brand left -->
+      <div class="auth-hero__brand">
+        <img src="{% static 'images/logo.png' %}" alt="HELIOSLINK" class="auth-hero__logo">
+        <h1 class="auth-hero__headline">
+          Infraestructura digital<br>
+          <em>bajo control.</em>
+        </h1>
+        <p class="auth-hero__desc">
+          Centraliza el monitoreo de redes, gestión de sistemas y análisis
+          de conectividad en una sola plataforma segura.
+        </p>
+      </div>
+
+      <!-- Login box right -->
+      <div class="auth-box">
+        <h2 class="auth-box__title">Iniciar sesión</h2>
+        <p class="auth-box__subtitle">Accede a tu panel de control</p>
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          {% if error %}
+          <p class="auth-error" role="alert">{{ error }}</p>
+          {% endif %}
+
+          <div class="auth-group">
+            <label class="auth-label" for="id_username">Usuario</label>
+            <input
+              class="auth-input"
+              type="text"
+              id="id_username"
+              name="username"
+              placeholder="Nombre de usuario"
+              autocomplete="username"
+              required
+            >
+          </div>
+
+          <div class="auth-group">
+            <label class="auth-label" for="id_password">Contraseña</label>
+            <input
+              class="auth-input"
+              type="password"
+              id="id_password"
+              name="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+            >
+          </div>
+
+          <button class="auth-submit" type="submit">Iniciar sesión</button>
+
+          <p class="auth-links">
+            ¿No tienes cuenta?
+            <a href="{% url 'crear_cuenta' %}">Crear una cuenta</a>
+          </p>
+          <p class="auth-links">
+            ¿Olvidaste la contraseña?
+            <a href="{% url 'restablecer' %}">Restaurar contraseña</a>
+          </p>
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- INFO SECTIONS -->
+  <section class="auth-info-sections" aria-label="Sobre HELIOSLINK">
+    <div class="auth-info-inner">
+
+      <article class="auth-info-card">
+        <p class="auth-info-card__eyebrow">¿Qué es?</p>
+        <h3 class="auth-info-card__title">HELIOSLINK</h3>
+        <p class="auth-info-card__text">
+          Proyecto orientado al desarrollo e integración de soluciones tecnológicas
+          enfocadas en redes, infraestructura digital, monitoreo de sistemas y ciberseguridad.
+          Centraliza herramientas para mejorar la administración de recursos en entornos
+          académicos y empresariales.
+        </p>
+      </article>
+
+      <article class="auth-info-card">
+        <p class="auth-info-card__eyebrow">Misión</p>
+        <h3 class="auth-info-card__title">Conectividad inteligente</h3>
+        <p class="auth-info-card__text">
+          Desarrollar soluciones tecnológicas innovadoras que permitan mejorar la
+          conectividad, la administración de redes y la seguridad de la información
+          mediante el uso eficiente de herramientas digitales.
+        </p>
+      </article>
+
+      <article class="auth-info-card">
+        <p class="auth-info-card__eyebrow">Valores</p>
+        <h3 class="auth-info-card__title">Lo que nos define</h3>
+        <ul class="auth-info-card__list">
+          <li><strong>Innovación:</strong> búsqueda constante de nuevas tecnologías.</li>
+          <li><strong>Responsabilidad:</strong> compromiso con la seguridad y estabilidad.</li>
+          <li><strong>Calidad:</strong> implementación de soluciones confiables.</li>
+          <li><strong>Colaboración:</strong> trabajo en equipo para objetivos comunes.</li>
+          <li><strong>Integridad:</strong> desarrollo basado en ética y transparencia.</li>
+        </ul>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="auth-footer">
+    <p>© 2026 HELIOSLINK — Todos los derechos reservados</p>
+  </footer>
+
+</body>
+</html>

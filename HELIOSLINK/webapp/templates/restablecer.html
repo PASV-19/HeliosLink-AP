@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restablecer contraseña — HELIOSLINK</title>
+  <link rel="stylesheet" href="{% static 'css/variables.css' %}">
+  <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+
+<body class="auth-body">
+
+  <section class="auth-hero">
+    <div class="auth-hero__bg" aria-hidden="true"></div>
+
+    <div class="auth-hero__content" style="justify-content:center;">
+
+      <div class="auth-box">
+        <img src="{% static 'images/logo.png' %}" alt="HELIOSLINK" class="auth-hero__logo" style="margin-bottom:var(--space-6);">
+        <h2 class="auth-box__title">Restablecer contraseña</h2>
+        <p class="auth-box__subtitle">Ingresa tu correo y te enviaremos un enlace de recuperación</p>
+
+        <form method="post">
+          {% csrf_token %}  
+          <div class="auth-group">
+              <label class="auth-label" for="{{ form.email.id_for_label }}">Correo electrónico</label>
+            <input
+              class="auth-input"
+              type="email"
+              name="email"
+              id="{{ form.email.id_for_label }}"
+              placeholder="correo@ejemplo.com"
+              autocomplete="email"
+            >
+          </div>
+
+          <button class="auth-submit" type="submit">Enviar enlace de recuperación</button>
+
+          <p class="auth-links">
+            <a href="">← Volver al inicio de sesión</a>
+          </p>
+
+        </form>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="auth-footer">
+    <p>© 2026 HELIOSLINK — Todos los derechos reservados</p>
+  </footer>
+
+</body>
+</html>
